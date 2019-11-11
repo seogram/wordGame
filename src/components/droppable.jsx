@@ -5,12 +5,18 @@ const ItemDiv = styled.div`
   width: 100%;
   user-select: none;
   text-align: center;
-  font-size: 3rem;
+  font-size: 4rem;
+  font-weight: bold;
   background: transparent;
 `;
 
 const Container = styled.div`
-  border: 1px solid #111;
+  border: ${props =>
+    props.correctAnswer === undefined
+      ? '2px solid #111'
+      : props.correctAnswer === true
+      ? '4px solid green'
+      : '2px solid red'};
   padding: 0.5rem 0.5rem 3rem 0;
   background: #f2f2f2;
   margin: 5rem 3rem;
@@ -19,7 +25,7 @@ const Container = styled.div`
   height: 8rem;
 `;
 
-const DroppAbleBoard = ({ Droppable, Draggable, state }) => {
+const DroppAbleBoard = ({ Droppable, Draggable, state, result }) => {
   const mainBoard = Object.keys(state).map((list, index) => {
     return (
       <Droppable
@@ -31,6 +37,8 @@ const DroppAbleBoard = ({ Droppable, Draggable, state }) => {
           <Container
             data-test="droppAble-objects"
             ref={provided.innerRef}
+            correctAnswer={result[index]}
+
             // isDraggingOver={snapshot.isDraggingOver}
           >
             {state[list].map((item, index1) => {

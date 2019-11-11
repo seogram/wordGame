@@ -1,22 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import { UserContext } from '../utils/context';
-
-const useStyles = makeStyles(theme => ({
-  button: {
-    margin: theme.spacing(4)
-  },
-  disabledButton: {
-    margin: theme.spacing(4),
-    opacity: '0.9',
-    cursor: 'not-allowed',
-    color: '#111'
-  }
-}));
+import { Second } from '../styles';
 
 export default function Countdown() {
-  const classes = useStyles();
   const theme = useContext(UserContext);
   const [timing, setTiming] = useState(false);
   const [second, setSecond] = useState(theme.allowdTime);
@@ -40,27 +26,19 @@ export default function Countdown() {
       setTiming(false);
       setSecond(0);
     }
+
     return () => clearInterval(interval);
   }, [theme, timing]);
 
+  useEffect(() => {
+    setTiming(true);
+    setSecond(60);
+  }, [theme.playClicked]);
   return (
     <div className="container">
-      <Button
-        variant="outlined"
-        color="primary"
-        size="large"
-        className={
-          timing && !theme.timeExpired ? classes.disabledButton : classes.button
-        }
-        onClick={() => {
-          setTiming(true);
-          setSecond(theme.allowdTime);
-          theme.setTimeExpired(false);
-          theme.setCorrectAnswer(false);
-        }}
-      >
-        {timing && !theme.timeExpired ? `You have ${second} seconds` : 'Play'}
-      </Button>
+      {timing && !theme.timeExpired && (
+        <Second timing={timing}>{second} </Second>
+      )}
     </div>
   );
 }

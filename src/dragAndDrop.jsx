@@ -1,3 +1,5 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/no-access-state-in-setstate */
 import React from 'react';
 import uuid from 'uuid/v4';
 import {
@@ -11,41 +13,16 @@ import DraggAbles from './components/draggables';
 import DroppAbleBoard from './components/droppable';
 import { Content } from './styles';
 
-/* const ITEMS = [
-  {
-    id: 'a',
-    content: 'A'
-  },
-  {
-    id: 'b',
-    content: 'B'
-  },
-  {
-    id: 'c',
-    content: 'C'
-  },
-  {
-    id: 'd',
-    content: 'D'
-  },
-  {
-    id: 'e',
-    content: 'E'
-  },
-  {
-    id: 'f',
-    content: 'F'
-  }
-]; */
-
 // a little function to help us with reordering the result
+/* 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
 
   return result;
-};
+}; */
+
 /**
  * Moves an item from one list to another list.
  */
@@ -58,7 +35,7 @@ const copy = (source, destination, droppableSource, droppableDestination) => {
   return destClone;
 };
 
-const move = (source, destination, droppableSource, droppableDestination) => {
+/* const move = (source, destination, droppableSource, droppableDestination) => {
   const sourceClone = Array.from(source);
   const destClone = Array.from(destination);
   const [removed] = sourceClone.splice(droppableSource.index, 1);
@@ -77,7 +54,7 @@ const move = (source, destination, droppableSource, droppableDestination) => {
   result[droppableSource.droppableId] = sourceClone;
   result[droppableDestination.droppableId] = uniqueDestClone;
   return result;
-};
+}; */
 
 export default class DragAndDrop extends React.Component {
   constructor(props) {
@@ -119,6 +96,7 @@ export default class DragAndDrop extends React.Component {
     }
     const { droppableId } = destination;
     if (droppableId === 'ITEMS') {
+      console.log('cond1');
       const filteredItems = this.state[source.droppableId]
         ? this.state[source.droppableId].filter(item => item.id !== draggableId)
         : [];
@@ -128,7 +106,6 @@ export default class DragAndDrop extends React.Component {
           [source.droppableId]: filteredItems
         },
         () => theme.dragChange(this.state, 'dragQuestion2')
-        // () => console.log("state", this.state)
       );
       return;
     }
@@ -144,12 +121,14 @@ export default class DragAndDrop extends React.Component {
         () => theme.dragChange(this.state, 'dragQuestion6')
       );
     } else {
+      console.log('cond2');
+
       const isDuplicate = Boolean(
         this.state[droppableId].filter(item => item.content === draggableId)
           .length
       );
       switch (source.droppableId) {
-        case destination.droppableId:
+        /*    case destination.droppableId:
           this.setState(
             {
               [destination.droppableId]: reorder(
@@ -160,10 +139,13 @@ export default class DragAndDrop extends React.Component {
             },
             () => theme.dragChange(this.state, 'dragQuestion3')
           );
-          break;
+          break; */
         case 'ITEMS':
           // move from dragObjects to drop  board
           if (isDuplicate) {
+            return;
+          }
+          if (this.state[destination.droppableId].length) {
             return;
           }
           this.setState(
@@ -180,7 +162,8 @@ export default class DragAndDrop extends React.Component {
           break;
         default:
           // move to sibling position
-          this.setState(
+
+          /*  this.setState(
             move(
               this.state[source.droppableId],
               this.state[destination.droppableId],
@@ -188,7 +171,7 @@ export default class DragAndDrop extends React.Component {
               destination
             ),
             () => theme.dragChange(this.state, 'dragQuestion5')
-          );
+          ); */
           break;
       }
     }
@@ -196,6 +179,7 @@ export default class DragAndDrop extends React.Component {
 
   render() {
     const theme = this.context;
+
     return (
       <>
         <div
@@ -227,6 +211,7 @@ export default class DragAndDrop extends React.Component {
               Draggable={Draggable}
               state={this.state}
               items={theme.randomWords}
+              result={theme.result}
             />
             <div style={{ clear: 'both' }} />
           </Content>

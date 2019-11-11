@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Countdown from './components/Countdown';
 import DragAndDrop from './dragAndDrop';
-import './App.css';
-import { HeaderText } from './styles';
+import PlayButton from './components/playButton';
+import { Header, SubHeader } from './styles';
 import { Provider } from './utils/context';
 import shuffle from './utils/shuffle';
 import randomIndex from './utils/randomIndex';
@@ -10,6 +10,7 @@ import draggableItemMaker from './utils/draggableItemMaker';
 import charMatcher from './utils/charMatcher';
 import calculateWrongAnswer from './utils/calculateWrongAnswer';
 import isAnswerCorrect from './utils/isAnswerCorrect';
+import './App.css';
 
 export default function App() {
   const [timeExpired, setTimeExpired] = useState(true);
@@ -17,10 +18,11 @@ export default function App() {
   const [answer, setAnswer] = useState(null);
   const [correctAnswer, setCorrectAnswer] = useState(false);
 
-  const [selectedChars, setSelectedChars] = useState(null);
+  // const [selectedChars, setSelectedChars] = useState(null);
   const [wrongAnswer, setWrongAnswer] = useState(0);
   const [result, setResult] = useState({});
-  const [allowdTime, setAllowedTime] = useState(15);
+  const [allowdTime] = useState(30);
+  const [playClicked, setPlayClicked] = useState(false);
 
   useEffect(() => {
     const wordsPool = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
@@ -36,33 +38,10 @@ export default function App() {
     const index = randomIndex(wordsPool);
     const currentAnswer = shuffle(answersPool)[randomIndex(answersPool)];
     const currentRandomWords = shuffle([
-      ...shuffle(wordsPool).slice(index, index + 1),
+      ...shuffle(wordsPool).slice(index, index + 4),
       ...currentAnswer.split('')
     ]);
     setAnswer(currentAnswer);
-    setRandomWords(currentRandomWords);
-  }, [timeExpired]);
-
-  useEffect(() => {
-    const wordsPool = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
-    const answersPool = [
-      'about',
-      'black',
-      'cable',
-      'chart',
-      'daily',
-      'draft',
-      'funny'
-    ];
-    const index = randomIndex(wordsPool);
-    const currentAnswer = shuffle(answersPool)[randomIndex(answersPool)];
-    const currentRandomWords = shuffle([
-      ...shuffle(wordsPool).slice(index, index + 1),
-      ...currentAnswer.split('')
-    ]);
-    setAnswer(currentAnswer);
-    // console.log(currentAnswer);
-
     setRandomWords(draggableItemMaker(currentRandomWords));
   }, [timeExpired]);
 
@@ -71,6 +50,7 @@ export default function App() {
       setTimeExpired(true);
     }
   }, [wrongAnswer]);
+
   const dragChange = chars => {
     const currentResult = charMatcher(answer, chars);
     if (isAnswerCorrect(currentResult, answer)) {
@@ -79,7 +59,16 @@ export default function App() {
     }
     setResult(currentResult);
     setWrongAnswer(calculateWrongAnswer(currentResult));
-    setSelectedChars(chars);
+    // setSelectedChars(chars);
+  };
+
+  const handlePlay = () => {
+    setPlayClicked(!playClicked);
+    setWrongAnswer(0);
+    setResult({});
+    setCorrectAnswer(false);
+    setTimeExpired(true);
+    setRandomWords([]);
   };
 
   const appContext = {
@@ -87,6 +76,9 @@ export default function App() {
     timeExpired,
     randomWords,
     answer,
+    handlePlay,
+    playClicked,
+    setPlayClicked,
     setCorrectAnswer,
     result,
     setTimeExpired,
@@ -96,16 +88,15 @@ export default function App() {
   return (
     <div className="App">
       <Provider value={appContext}>
-        <HeaderText>
-          Create the word by dragging letter into the empty boxes
-        </HeaderText>
         <Countdown />
-        {correctAnswer && <HeaderText>YOU WON !</HeaderText>}
-        {!timeExpired && (
-          <>
-            <DragAndDrop />
-          </>
-        )}
+        <Header>Create the word by dragging letter into the empty boxes</Header>
+        <SubHeader>You have one minute</SubHeader>
+        <PlayButton />
+        {correctAnswer && <Header>YOU WON !</Header>}
+        {wrongAnswer === 3 && <Header>YOU LOST !</Header>}
+        {/* {playClicked && <Header>YOUR TIME EXPIRED !</Header>} */}
+
+        {!timeExpired && <DragAndDrop />}
       </Provider>
     </div>
   );

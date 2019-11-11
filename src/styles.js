@@ -1,10 +1,15 @@
 import styled from 'styled-components';
 
-export const HeaderText = styled.div`
+export const Header = styled.div`
+  margin: 1rem;
   font-size: 2.5rem;
   text-align: center;
 `;
 
+export const SubHeader = styled.div`
+  font-size: 1.5rem;
+  text-align: center;
+`;
 export const Content = styled.div`
   display: flex;
   flex-wrap: nowrap;
@@ -12,7 +17,15 @@ export const Content = styled.div`
   background-color: transparent;
 `;
 
-export const Kiosk = styled.div`
+export const Second = styled.div`
+  color: ${props => (props.timing ? '#32cdcd' : 'red')};
   text-align: center;
-  width: 100%;
+  font-size: 2rem;
+  padding: 1rem;
+`;
+
+export const DefaultLabel = styled.div`
+  color: ${props => (props.expired ? 'red' : '#32cdcd')};
+  font-size: 25px;
+  padding: 1rem;
 `;

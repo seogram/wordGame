@@ -12,13 +12,14 @@ function getStyle(style, snapshot) {
 }
 
 const ItemDiv = styled.div`
+  color: green;
   user-select: none;
   border: 1px solid #111;
   padding: 1rem;
   background: #f2f2f2;
   width: 100%;
   height: 2rem;
-  margin: 1rem 3rem;
+  margin: 1rem 1.5rem;
 `;
 
 const Clone = styled(ItemDiv)`
@@ -31,33 +32,6 @@ const DragItemText = styled.span`
   font-size: 2rem;
   text-align: center;
 `;
-
-const ITEMS = [
-  {
-    id: 'a',
-    content: 'A'
-  },
-  {
-    id: 'b',
-    content: 'B'
-  },
-  {
-    id: 'c',
-    content: 'C'
-  },
-  {
-    id: 'd',
-    content: 'D'
-  },
-  {
-    id: 'e',
-    content: 'E'
-  },
-  {
-    id: 'f',
-    content: 'F'
-  }
-];
 
 const DraggAbles = ({ Draggable, items }) => {
   return items.map((item, index) => {
