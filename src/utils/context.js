@@ -1,8 +1,10 @@
 import React from 'react';
 
 export const UserContext = React.createContext({
+  allowdTime: null,
   randomWords: null,
   answer: null,
+  result: {},
   handleTimeOut: () => {},
   dragChange: () => {}
 });

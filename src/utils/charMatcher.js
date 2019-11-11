@@ -16,7 +16,7 @@ export default function charMatcher(answer, selectedChars) {
       }
     }
   });
-  console.log('answerCharMap', answerCharMap);
-  console.log('selectedCharsMap', selectedCharsMap);
+  // console.log('answerCharMap', answerCharMap);
+  // console.log('selectedCharsMap', selectedCharsMap);
   return result;
 }

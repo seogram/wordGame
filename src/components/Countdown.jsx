@@ -15,28 +15,30 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const COUNTDOWN_SECONDS = 59;
-
 export default function Countdown() {
   const classes = useStyles();
   const theme = useContext(UserContext);
   const [timing, setTiming] = useState(false);
-  const [second, setSecond] = useState(COUNTDOWN_SECONDS);
+  const [second, setSecond] = useState(theme.allowdTime);
 
   useEffect(() => {
     let interval;
-    if (timing) {
+    if (timing && !theme.timeExpired) {
       interval = setInterval(() => {
         setSecond(preSecond => {
           if (preSecond <= 1) {
             setTiming(false);
-            theme.handleTimeOut(true);
+            theme.setTimeExpired(true);
             clearInterval(interval);
-            return COUNTDOWN_SECONDS;
+            return theme.allowdTime;
           }
           return preSecond - 1;
         });
       }, 1000);
+    }
+    if (theme.timeExpired) {
+      setTiming(false);
+      setSecond(0);
     }
     return () => clearInterval(interval);
   }, [theme, timing]);
@@ -47,13 +49,17 @@ export default function Countdown() {
         variant="outlined"
         color="primary"
         size="large"
-        className={timing ? classes.disabledButton : classes.button}
+        className={
+          timing && !theme.timeExpired ? classes.disabledButton : classes.button
+        }
         onClick={() => {
-          theme.handleTimeOut(false);
           setTiming(true);
+          setSecond(theme.allowdTime);
+          theme.setTimeExpired(false);
+          theme.setCorrectAnswer(false);
         }}
       >
-        {timing ? `You have ${second} seconds` : 'Play'}
+        {timing && !theme.timeExpired ? `You have ${second} seconds` : 'Play'}
       </Button>
     </div>
   );

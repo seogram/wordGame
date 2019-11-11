@@ -8,13 +8,19 @@ import shuffle from './utils/shuffle';
 import randomIndex from './utils/randomIndex';
 import draggableItemMaker from './utils/draggableItemMaker';
 import charMatcher from './utils/charMatcher';
+import calculateWrongAnswer from './utils/calculateWrongAnswer';
+import isAnswerCorrect from './utils/isAnswerCorrect';
 
 export default function App() {
   const [timeExpired, setTimeExpired] = useState(true);
   const [randomWords, setRandomWords] = useState([]);
   const [answer, setAnswer] = useState(null);
+  const [correctAnswer, setCorrectAnswer] = useState(false);
+
   const [selectedChars, setSelectedChars] = useState(null);
   const [wrongAnswer, setWrongAnswer] = useState(0);
+  const [result, setResult] = useState({});
+  const [allowdTime, setAllowedTime] = useState(15);
 
   useEffect(() => {
     const wordsPool = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
@@ -34,8 +40,6 @@ export default function App() {
       ...currentAnswer.split('')
     ]);
     setAnswer(currentAnswer);
-    // console.log(currentAnswer);
-
     setRandomWords(currentRandomWords);
   }, [timeExpired]);
 
@@ -62,20 +66,30 @@ export default function App() {
     setRandomWords(draggableItemMaker(currentRandomWords));
   }, [timeExpired]);
 
-  const dragChange = (chars, str) => {
-    console.log('charMatcher', charMatcher(answer, chars));
-    setWrongAnswer(charMatcher(answer, chars) ? wrongAnswer : wrongAnswer + 1);
+  useEffect(() => {
+    if (wrongAnswer === 3) {
+      setTimeExpired(true);
+    }
+  }, [wrongAnswer]);
+  const dragChange = chars => {
+    const currentResult = charMatcher(answer, chars);
+    if (isAnswerCorrect(currentResult, answer)) {
+      setCorrectAnswer(true);
+      setTimeExpired(true);
+    }
+    setResult(currentResult);
+    setWrongAnswer(calculateWrongAnswer(currentResult));
     setSelectedChars(chars);
   };
 
-  const handleTimeOut = value => {
-    setTimeExpired(value);
-  };
-
   const appContext = {
+    allowdTime,
+    timeExpired,
     randomWords,
     answer,
-    handleTimeOut,
+    setCorrectAnswer,
+    result,
+    setTimeExpired,
     dragChange
   };
 
@@ -86,6 +100,7 @@ export default function App() {
           Create the word by dragging letter into the empty boxes
         </HeaderText>
         <Countdown />
+        {correctAnswer && <HeaderText>YOU WON !</HeaderText>}
         {!timeExpired && (
           <>
             <DragAndDrop />
