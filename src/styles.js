@@ -1,11 +1,21 @@
 import styled from 'styled-components';
 
+export const Container = styled.div`
+  text-align: center;
+  margin: 2rem;
+`;
 export const Header = styled.div`
   margin: 1rem;
   font-size: 2.5rem;
   text-align: center;
 `;
 
+export const Label = styled.div`
+  color: ${props => (props.state === 'success' ? '#006400' : 'red')};
+  margin: 1rem;
+  font-size: 2.5rem;
+  text-align: center;
+`;
 export const SubHeader = styled.div`
   font-size: 1.5rem;
   text-align: center;

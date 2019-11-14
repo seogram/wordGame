@@ -7,7 +7,9 @@ export const UserContext = React.createContext({
   result: {},
   handleTimeOut: () => {},
   dragChange: () => {},
-  handlePlay: () => {}
+  handlePlay: () => {},
+  setLostByTime: () => {},
+  checkWrongChar: () => {}
 });
 export const { Provider } = UserContext;
 export const { Consumer } = UserContext;

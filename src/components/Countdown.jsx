@@ -15,6 +15,7 @@ export default function Countdown() {
           if (preSecond <= 1) {
             setTiming(false);
             theme.setTimeExpired(true);
+            theme.setLostByTime(true);
             clearInterval(interval);
             return theme.allowdTime;
           }
@@ -32,8 +33,8 @@ export default function Countdown() {
 
   useEffect(() => {
     setTiming(true);
-    setSecond(60);
-  }, [theme.playClicked]);
+    setSecond(theme.allowdTime);
+  }, [theme.allowdTime, theme.playClicked]);
   return (
     <div className="container">
       {timing && !theme.timeExpired && (

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import styled from 'styled-components';
 
@@ -12,7 +13,9 @@ function getStyle(style, snapshot) {
 }
 
 const ItemDiv = styled.div`
-  color: green;
+  color: ${props => (props.selected ? 'gray' : 'green')};
+  pointer-events: ${props => (props.selected ? 'none' : 'auto')};
+  opacity: ${props => (props.selected ? 0.5 : 1)};
   user-select: none;
   border: 1px solid #111;
   padding: 1rem;
@@ -33,7 +36,7 @@ const DragItemText = styled.span`
   text-align: center;
 `;
 
-const DraggAbles = ({ Draggable, items }) => {
+const DraggAbles = ({ Draggable, items, draggedIds }) => {
   return items.map((item, index) => {
     return (
       <Draggable
@@ -45,21 +48,21 @@ const DraggAbles = ({ Draggable, items }) => {
         {(provided, snapshot) => (
           <>
             <ItemDiv
+              selected={draggedIds.includes(item.id)}
               ref={provided.innerRef}
               {...provided.draggableProps}
               {...provided.dragHandleProps}
+              dragging={snapshot.isDragging}
               // isDragging={snapshot.isDragging}
               // style={provided.draggableProps.style}
               style={getStyle(provided.draggableProps.style, snapshot)}
             >
-              {/*     <div
-                data-test={`img-${item.content}`}
+              {/* <div
                 style={
                   snapshot.isDragging
-                    ? { background: '#red' }
-                    : { background: '#red' }
+                    ? { background: 'red' }
+                    : { background: 'gray' }
                 }
-                alt="words"
               > */}
               <DragItemText>{item.content}</DragItemText>
               {/* </div> */}
