@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import Countdown from "./components/Countdown";
-import DragAndDrop from "./dragAndDrop";
-import PlayButton from "./components/playButton";
-import { Container, Header, SubHeader, Label } from "./styles";
-import { Provider } from "./utils/context";
-import shuffle from "./utils/shuffle";
-import randomIndex from "./utils/randomIndex";
-import draggableItemMaker from "./utils/draggableItemMaker";
-import charMatcher from "./utils/charMatcher";
-import isAnswerCorrect from "./utils/isAnswerCorrect";
-import { answersPool, wordsPool } from "./initialData";
+import React, { useEffect, useState } from 'react';
+import Countdown from './components/countDown/Countdown';
+import DragAndDrop from './dragAndDrop';
+import PlayButton from './components/playButton/playButton';
+import { Container, Header, SubHeader, Label } from './styles';
+import { Provider } from './utils/context';
+import shuffle from './utils/shuffle/shuffle';
+import randomArrayPicker from './utils/randomArrayPicker/randomArrayPicker';
+import draggableItemMaker from './utils/draggableItemMaker/draggableItemMaker';
+import charMatcher from './utils/charMatcher/charMatcher';
+import isAnswerCorrect from './utils/isAnswerCorrect/isAnswerCorrect';
+import { answersPool, wordsPool } from './initialData';
 
 export default function App() {
   const [timeExpired, setTimeExpired] = useState(true);
@@ -23,21 +23,15 @@ export default function App() {
   const [playClicked, setPlayClicked] = useState(false);
 
   useEffect(() => {
-    const index = randomIndex(wordsPool);
-    const currentAnswer = shuffle(answersPool)[randomIndex(answersPool)];
+    const currentAnswer = shuffle(randomArrayPicker(answersPool, 1))[0];
     const currentRandomWords = shuffle([
-      ...shuffle(wordsPool).slice(index, index + 4),
-      ...currentAnswer.split("")
+      ...randomArrayPicker(wordsPool, 4),
+      ...currentAnswer.split(''),
     ]);
+
     setAnswer(currentAnswer);
     setRandomWords(draggableItemMaker(currentRandomWords));
   }, [timeExpired]);
-
-  /*   useEffect(() => {
-    if (wrongAnswer === 3) {
-      setTimeExpired(true);
-    }
-  }, [wrongAnswer]); */
 
   const dragChange = chars => {
     const currentResult = charMatcher(answer, chars);
@@ -79,23 +73,31 @@ export default function App() {
     result,
     setTimeExpired,
     dragChange,
-    checkWrongChar
+    checkWrongChar,
   };
 
   return (
     <Container>
       <Provider value={appContext}>
         <Countdown />
-        <Header>Create the word by dragging letter into the empty boxes</Header>
-        <SubHeader>You have one minute</SubHeader>
-        <PlayButton />
-        {correctAnswer && <Label state="success">YOU WON !</Label>}
+        <Header data-test='header-label'>
+          Create the word by dragging letter into the empty boxes
+        </Header>
+        <SubHeader data-test='subheader-label'>You have one minute</SubHeader>
+        <PlayButton data-test='play-btn-compo' />
+        {correctAnswer && <Label state='success'>YOU WON !</Label>}
         {wrongAnswer === 3 && (
-          <Label state="failure">TOO WRONG ANSWERS !</Label>
+          <Label data-test='wrong-answer-label' state='failure'>
+            TOO WRONG ANSWERS !
+          </Label>
         )}
-        {lostByTime && <Label state="failure">YOUR TIME EXPIRED !</Label>}
+        {lostByTime && (
+          <Label data-test='time-expired-label' state='failure'>
+            YOUR TIME EXPIRED !
+          </Label>
+        )}
 
-        {!timeExpired && <DragAndDrop />}
+        {!timeExpired && <DragAndDrop data-test='drag-compo' />}
       </Provider>
     </Container>
   );

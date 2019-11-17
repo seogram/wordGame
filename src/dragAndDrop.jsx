@@ -1,19 +1,17 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/no-access-state-in-setstate */
-import React from "react";
-import uuid from "uuid/v4";
+import React from 'react';
+import uuid from 'uuid/v4';
 import {
   DragDropContext,
   Droppable,
-  Draggable
+  Draggable,
   // DroppableStateSnapshot,
-} from "react-beautiful-dnd";
-import { UserContext } from "./utils/context";
-import DraggAbles from "./components/draggables";
-import DroppAbleBoard from "./components/droppable";
-import { Content } from "./styles";
-import deletedIds from "./utils/deletedIds";
-import draggedIdsUpdater from "./utils/draggedIdsUpdater";
+} from 'react-beautiful-dnd';
+import { UserContext } from './utils/context';
+import DraggAbles from './components/draggables';
+import DroppAbleBoard from './components/droppable';
+import { Content } from './styles';
+import deletedIds from './utils/deletedIds/deletedIds';
+import draggedIdsUpdater from './utils/draggedIdsUpdater/draggedIdsUpdater';
 
 /**
  * Moves an item from one list to another list.
@@ -40,7 +38,7 @@ export default class DragAndDrop extends React.Component {
     const { length } = theme.answer;
     for (let i = 0; i < length; i += 1) {
       this.setState({
-        [i]: []
+        [i]: [],
       });
     }
   }
@@ -51,11 +49,11 @@ export default class DragAndDrop extends React.Component {
     if (!source) {
       return;
     }
-    if (!destination && source.droppableId === "ITEMS") {
+    if (!destination && source.droppableId === 'ITEMS') {
       // dragging item from items to out side of dropboard
       return;
     }
-    if (!destination && source.droppableId !== "ITEMS") {
+    if (!destination && source.droppableId !== 'ITEMS') {
       // Drag item from dropboard to outside of the dropboard
       const deletedItem = deletedIds(this.dropBoardMap, source.droppableId);
       delete this.dropBoardMap[deletedItem];
@@ -65,9 +63,9 @@ export default class DragAndDrop extends React.Component {
         : [];
       this.setState(
         {
-          [source.droppableId]: filteredItems
+          [source.droppableId]: filteredItems,
         },
-        () => theme.dragChange(this.state, "dragQuestion1")
+        () => theme.dragChange(this.state, 'dragQuestion1')
       );
       return;
     }
@@ -77,7 +75,7 @@ export default class DragAndDrop extends React.Component {
         .length
     );
     switch (source.droppableId) {
-      case "ITEMS":
+      case 'ITEMS':
         // move from dragObjects to drop  board
         if (isDuplicate) {
           return;
@@ -102,7 +100,7 @@ export default class DragAndDrop extends React.Component {
               this.state[destination.droppableId],
               source,
               destination
-            )
+            ),
           },
           () => theme.dragChange(this.state)
         );
@@ -118,29 +116,20 @@ export default class DragAndDrop extends React.Component {
     return (
       <>
         <div
-          style={{ clear: "both", display: "block", marginBottom: "2rem" }}
+          style={{ clear: 'both', display: 'block', marginBottom: '2rem' }}
         />
-        <DragDropContext
-          onDragEnd={this.onDragEnd}
-          // onDragUpdate={this.onDragEnd}
-        >
-          <Droppable droppableId="ITEMS" isDropDisabled>
-            {(
-              provided
-              // snapshot: DroppableStateSnapshot
-            ) => (
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          <Droppable droppableId='ITEMS' isDropDisabled>
+            {provided => (
               <>
-                <Content
-                  ref={provided.innerRef}
-                  // isDraggingOver={snapshot.isDraggingOver}
-                >
+                <Content ref={provided.innerRef}>
                   <DraggAbles
                     Draggable={Draggable}
                     items={theme.randomWords}
                     draggedIds={this.draggedIds}
                   />
                 </Content>
-                <div style={{ clear: "both" }} />
+                <div style={{ clear: 'both' }} />
               </>
             )}
           </Droppable>
@@ -152,10 +141,13 @@ export default class DragAndDrop extends React.Component {
               items={theme.randomWords}
               result={theme.result}
             />
-            <div style={{ clear: "both" }} />
+            <div style={{ clear: 'both' }} />
           </Content>
+          <span>
+            Drag selected item and drop it outside of any above 5 positions to
+            remove them !
+          </span>
         </DragDropContext>
-        <div style={{ height: "100px" }} />
       </>
     );
   }

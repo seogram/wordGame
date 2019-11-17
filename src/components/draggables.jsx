@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import styled from 'styled-components';
 
@@ -8,7 +7,7 @@ function getStyle(style, snapshot) {
   }
   return {
     ...style,
-    transitionDuration: `0.001s`
+    transitionDuration: `0.001s`,
   };
 }
 
@@ -53,24 +52,9 @@ const DraggAbles = ({ Draggable, items, draggedIds }) => {
               {...provided.draggableProps}
               {...provided.dragHandleProps}
               dragging={snapshot.isDragging}
-              // isDragging={snapshot.isDragging}
-              // style={provided.draggableProps.style}
               style={getStyle(provided.draggableProps.style, snapshot)}
             >
-              {/* <div
-                style={
-                  snapshot.isDragging
-                    ? { background: 'red' }
-                    : { background: 'gray' }
-                }
-              > */}
               <DragItemText>{item.content}</DragItemText>
-              {/* </div> */}
-              {/* {!snapshot.isDragging && (
-                <DragItemText data-test={`object-${item.content}`}>
-                  {item.content}
-                </DragItemText>
-              )} */}
             </ItemDiv>
             {snapshot.isDragging && (
               <Clone>
@@ -79,7 +63,7 @@ const DraggAbles = ({ Draggable, items, draggedIds }) => {
                     snapshot.isDragging && {
                       width: '70px',
                       marginRight: '20px',
-                      visibility: 'hidden'
+                      visibility: 'hidden',
                     }
                   }
                 >

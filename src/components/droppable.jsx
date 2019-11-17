@@ -28,18 +28,12 @@ const Container = styled.div`
 const DroppAbleBoard = ({ Droppable, Draggable, state, result }) => {
   const mainBoard = Object.keys(state).map((list, index) => {
     return (
-      <Droppable
-        key={list}
-        droppableId={list}
-        // isDropDisabled={index === 0 || index === 1}
-      >
+      <Droppable key={list} droppableId={list}>
         {provided => (
           <Container
-            data-test="droppAble-objects"
+            data-test='droppAble-objects'
             ref={provided.innerRef}
             correctAnswer={result[index]}
-
-            // isDraggingOver={snapshot.isDraggingOver}
           >
             {state[list].map((item, index1) => {
               return (
@@ -49,7 +43,6 @@ const DroppAbleBoard = ({ Droppable, Draggable, state, result }) => {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      // isDragging={snapshot.isDragging}
                       style={provided.draggableProps.style}
                     >
                       {item.content}
