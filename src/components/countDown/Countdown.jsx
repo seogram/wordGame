@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { UserContext } from '../utils/context';
-import { Second } from '../styles';
+import { UserContext } from '../../utils/context';
+import { Second } from '../../styles';
 
 export default function Countdown() {
   const theme = useContext(UserContext);
@@ -36,9 +36,11 @@ export default function Countdown() {
     setSecond(theme.allowdTime);
   }, [theme.allowdTime, theme.playClicked]);
   return (
-    <div className="container">
+    <div className='container'>
       {timing && !theme.timeExpired && (
-        <Second timing={timing}>{second} </Second>
+        <Second data-test='counter' timing={timing}>
+          {second}
+        </Second>
       )}
     </div>
   );

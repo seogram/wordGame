@@ -1,7 +1,7 @@
 export default function charMatcher(answer, selectedChars) {
   const answerCharMap = {};
   const selectedCharsMap = {};
-  const answerArr = answer.split('');
+  const answerArr = answer.split("");
   const result = {};
   answerArr.forEach((el, i) => {
     answerCharMap[i] = el.toLowerCase();
@@ -16,7 +16,6 @@ export default function charMatcher(answer, selectedChars) {
       }
     }
   });
-  // console.log('answerCharMap', answerCharMap);
-  // console.log('selectedCharsMap', selectedCharsMap);
+
   return result;
 }

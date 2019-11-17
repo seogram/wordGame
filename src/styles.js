@@ -28,14 +28,33 @@ export const Content = styled.div`
 `;
 
 export const Second = styled.div`
-  color: ${props => (props.timing ? '#32cdcd' : 'red')};
+  color: ${props => (props.timing ? 'green' : 'red')};
   text-align: center;
   font-size: 2rem;
+  font-weight: 600;
   padding: 1rem;
 `;
 
 export const DefaultLabel = styled.div`
-  color: ${props => (props.expired ? 'red' : '#32cdcd')};
+  color: ${props => (props.expired ? 'red' : 'green')};
   font-size: 25px;
   padding: 1rem;
+`;
+
+export const Button = styled.button`
+  background: green;
+  opacity: ${props => (!props.timeExpired ? 0 : 1)};
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 2rem;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid green;
+  border-radius: 4px;
+  -webkit-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+  &:hover {
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+      0 17px 50px 0 rgba(0, 0, 0, 0.19);
+  }
 `;

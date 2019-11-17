@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4';
+import uuid from "uuid/v4";
 
 export default function draggableItemMaker(randomWords) {
   const ITEMS = [];
@@ -8,6 +8,5 @@ export default function draggableItemMaker(randomWords) {
       content: word.toUpperCase()
     });
   });
-
   return ITEMS;
 }
